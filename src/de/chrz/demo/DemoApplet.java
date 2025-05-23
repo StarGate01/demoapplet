@@ -33,19 +33,22 @@ public class DemoApplet extends Applet
 
     protected DemoApplet(byte[] parameters, short parametersOffset, byte parametersLength)
     {
-        // Create new AES-128 key and randomize it
+        // Create new AES-128 key
         key = (AESKey) KeyBuilder.buildKey(KeyBuilder.TYPE_AES, KeyBuilder.LENGTH_AES_128, false);
+        // Generate 16 Bytes of random data
         byte[] secretRandom = new byte[16];
         RandomData random = RandomData.getInstance(RandomData.ALG_SECURE_RANDOM);
         random.generateData(secretRandom, (short) 0, (short) secretRandom.length);
+        // Assign random data as AES key
         key.setKey(secretRandom, (short) 0);
- 
-        // Initialize symmetric crypto engine
+
+        // Initialize symmetric crypto engine for AES-128
         cipher = Cipher.getInstance(Cipher.ALG_AES_BLOCK_128_CBC_NOPAD, false);
     }
 
     public void process(APDU apdu)
     {
+        // Access the incoming APDU commend
         final byte[] buffer = apdu.getBuffer();
         final byte ins = buffer[ISO7816.OFFSET_INS];
 
@@ -66,6 +69,7 @@ public class DemoApplet extends Applet
         }
         else
         {
+            // Parse length of passed data payload
             short dataLen = apdu.setIncomingAndReceive();
 
             // Ensure data length is valid for AES (must be multiple of 16 bytes)
@@ -74,16 +78,16 @@ public class DemoApplet extends Applet
                 ISOException.throwIt(ISO7816.SW_WRONG_LENGTH);
             }
 
-            if(ins == INS_ENCRYPT)
+            if(ins == INS_ENCRYPT) // Handle encryption command
             {
                 // Re-init crypto engine and do the encryption into the same buffer
                 cipher.init(key, Cipher.MODE_ENCRYPT);
                 len += cipher.doFinal(buffer, ISO7816.OFFSET_CDATA, dataLen, buffer, len);
                 validInstruction = true;
             }
-            else if(ins == INS_DECRYPT)
+            else if(ins == INS_DECRYPT) // Handle decryption command
             {
-                // Re-init crypto engine and do the encryption into the same buffer
+                // Re-init crypto engine and do the decryption into the same buffer
                 cipher.init(key, Cipher.MODE_DECRYPT);
                 len += cipher.doFinal(buffer, ISO7816.OFFSET_CDATA, dataLen, buffer, len);
                 validInstruction = true;
