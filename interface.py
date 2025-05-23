@@ -44,13 +44,29 @@ else:
     if(sw1 == 0x90 and sw2 == 0x00):
         print('success: Applet selected, card response is ok')
         
+        # Encryption test
+        payload = "Hello world".encode("ascii")
+        payload = payload.ljust(16, b'\0')
         print('info: Sending encryption command')
         data, sw1, sw2 = connection.transmit(
-            [0x00, 0x01, 0x00, 0x00, 0x00])
+            [0x00, 0x01, 0x00, 0x00, len(payload)] + list(payload) + [0x00])
         if(sw1 == 0x90 and sw2 == 0x00):
             print('success: Card response is ok')
+            response = bytes(data)
+            print(f'info: Encrypted data: {response.hex()}')
         else:
-            print('error: Version card response: ' + f'{sw1:02x}' + ' ' + f'{sw2:02x}')
+            print('error: status response: ' + f'{sw1:02x}' + ' ' + f'{sw2:02x}')
+
+        # Decryption test
+        print('info: Sending decryption command')
+        data, sw1, sw2 = connection.transmit(
+            [0x00, 0x02, 0x00, 0x00, len(response)] + list(response) + [0x00])
+        if(sw1 == 0x90 and sw2 == 0x00):
+            print('success: Card response is ok')
+            response = bytes(data)
+            print(f'info: Decrypted data: {response.hex()} = {response.decode("ascii")}')
+        else:
+            print('error: status response: ' + f'{sw1:02x}' + ' ' + f'{sw2:02x}')
 
     else:
         print('error: Card response: ' + f'{sw1:02x}' + ' ' + f'{sw2:02x}')
