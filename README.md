@@ -4,6 +4,8 @@ This is a small demo applet, intended to show how tooling and programming for ja
 
 The applet generates and stores an AES128 key, and is then able to encrypt and decrypt a fixed sized buffer of supplied data using that key.
 
+The included VSCode configuration provides all the tasks you need.
+
 ## Compilation
 
 This applet used `ant-javacard`, another choice could have been e.g. `maven`.
@@ -13,6 +15,10 @@ If you use Nix, a flake and direnv configuration is provided. Otherwise, make su
 ## Emulation
 
 You can use the `vsmartcard` virtual reader to create a virtual reader on your system, and then use the `jcardsim` emulator to attach an emulated instance of the applet to it.
+
+## Interaction
+
+Use the provided `interface.py` script to run a simple encryption and decryption demo.
 
 ## Disclaimer
 
