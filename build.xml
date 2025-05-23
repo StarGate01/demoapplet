@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="dist" name="demoapplet">
+  <target name="dist">
+    <get src="https://github.com/martinpaljak/ant-javacard/releases/download/v24.11.19/ant-javacard.jar" skipexisting="true" dest="."/>
+    <taskdef name="javacard" classname="pro.javacard.ant.JavaCard" classpath="ant-javacard.jar"/>
+    <javacard>
+      <cap output="target/demoapplet.cap" sources="src" classes="target" aid="A0000008466D64656D6F" version="1.0">
+        <applet class="de.chrz.demo.DemoApplet" aid="A0000008466D64656D6F01"/>
+      </cap>
+    </javacard>
+  </target>
+  <target name="clean" description="clean up">
+    <delete dir="target/demoapplet.cap"/>
+  </target>
+</project>

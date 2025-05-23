@@ -1,0 +1,20 @@
+{
+    "java.project.referencedLibraries": [
+        "${workspaceRoot}/sdks/js305u3_kit/lib/*.jar",
+    ],
+    "java.debug.settings.exceptionBreakpoint.skipClasses": [
+        "$JDK",
+        "$Libraries",
+        "com.licel.jcardsim.*",
+        "com.licel.jcardsim.base.*"
+    ],
+    "java.debug.settings.stepping.skipClasses": [
+        "$JDK",
+        "$Libraries",
+        "com.licel.jcardsim.*",
+        "com.licel.jcardsim.base.*"
+    ],
+    "java.debug.settings.onBuildFailureProceed": true,
+    "java.debug.settings.showHex": true,
+    "java.configuration.updateBuildConfiguration": "interactive"
+}

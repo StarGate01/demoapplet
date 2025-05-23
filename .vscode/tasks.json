@@ -1,0 +1,63 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compile Demoapplet",
+            "type": "shell",
+            "command": "JAVA_HOME=$JAVA_HOME_JDK8 ant",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "JC_HOME": "${workspaceFolder}/sdks/jc305u3_kit"
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Clean Demoapplet",
+            "type": "shell",
+            "command": "rm -rf ${workspaceFolder}/target",
+            "problemMatcher": []
+        },
+        {
+            "label": "Compile JCardSim",
+            "type": "shell",
+            "command": "JAVA_HOME=$JAVA_HOME_JDK8 mvn install",
+            "options": {
+                "cwd": "${workspaceFolder}/jcardsim",
+                "env": {
+                    "JC_CLASSIC_HOME": "${workspaceFolder}/sdks/jc305u3_kit"
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Clean JCardSim",
+            "type": "shell",
+            "command": "rm -rf ${workspaceFolder}/jcardsim/target",
+            "problemMatcher": []
+        },
+        {
+            "label": "Emulate Demoapplet",
+            "type": "shell",
+            "command": "JAVA_HOME=$JAVA_HOME_JDK8 java -cp ${workspaceFolder}/jcardsim/target/jcardsim-3.0.5-SNAPSHOT.jar:${workspaceFolder}/target com.licel.jcardsim.remote.VSmartCard ${workspaceFolder}/jcardsim.cfg 2>&1",
+            "problemMatcher": [],
+        },
+        {
+            "label": "Setup Demoapplet Emulation",
+            "type": "shell",
+            "command": "${workspaceFolder}/setup_emulator.sh",
+            "problemMatcher": [],
+        },
+    ]
+}
